@@ -7,12 +7,16 @@ key = 'a544aecdde85a1f52a56292f77ecde6e'
 
 def save_location(ip_addr):
     try:
-        location_data = get_location(ip_addr=ip_addr)
-        location = Location(
-            ip=ip_addr,
-            location=location_data
-        )
-        save_changes(location)
+        existing_location = Location.query.filter_by(ip=ip_addr).first()
+        if existing_location:
+            location_data = existing_location.location
+        else:
+            location_data = get_location(ip_addr=ip_addr)
+            location = Location(
+                ip=ip_addr,
+                location=location_data
+            )
+            save_changes(location)
 
     except Exception as e:
         if 'UNIQUE constraint failed: location.ip' not in str(e):
