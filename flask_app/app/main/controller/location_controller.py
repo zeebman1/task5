@@ -13,4 +13,4 @@ class Location(Resource):
     @api.doc('location by ip addr')
     @token_required
     def get(self):
-        return save_location(request.remote_addr)
+        return save_location(request.headers['X-Real-Ip'])
